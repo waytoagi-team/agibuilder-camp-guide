@@ -391,8 +391,7 @@ h3 {
 }
 
 .photo-strip figure,
-.guide-step,
-.nearby-image {
+.guide-step {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -756,48 +755,81 @@ h3 {
   font-size: 17px;
 }
 
-.nearby .section-heading.split {
-  align-items: center;
+.nearby-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  grid-template-areas:
+    "copy media"
+    "services media";
+  gap: 24px;
+  align-items: start;
+  padding: 24px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 18px 18px 0 rgba(17, 17, 17, 0.06);
 }
 
-.nearby .section-heading > div {
+.nearby-copy {
+  grid-area: copy;
   min-width: 0;
 }
 
-.nearby .section-heading h2 {
+.nearby-copy h2 {
+  max-width: 720px;
   text-wrap: balance;
 }
 
-.nearby .section-heading p:not(.eyebrow) {
-  max-width: 650px;
+.nearby-copy p:not(.eyebrow) {
+  max-width: 720px;
+  margin-bottom: 0;
   line-height: 1.72;
   text-align: left;
 }
 
-.nearby-image {
+.nearby-media {
+  grid-area: media;
   align-self: start;
-  width: min(380px, 100%);
-  height: auto;
-  aspect-ratio: auto;
-  object-fit: contain;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
   box-shadow: var(--shadow);
 }
 
+.nearby-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.nearby-media figcaption {
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .service-list {
+  grid-area: services;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .service-list article {
-  padding: 20px;
+  min-height: 148px;
+  padding: 18px;
 }
 
 .service-list strong {
   display: block;
   margin: 18px 0 6px;
-  font-size: clamp(21px, 2vw, 24px);
+  font-size: clamp(20px, 1.8vw, 23px);
   line-height: 1.25;
   text-wrap: balance;
-  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .contact {
@@ -947,8 +979,18 @@ h3 {
     max-height: none;
   }
 
-  .nearby .section-heading.split {
+  .nearby-panel {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "media"
+      "services";
     gap: 18px;
+    padding: 18px;
+  }
+
+  .nearby-copy p:not(.eyebrow) {
+    max-width: none;
   }
 
   .contact {
@@ -1026,6 +1068,7 @@ h3 {
   .photo-strip,
   .quick-grid,
   .rule-grid,
+  .service-list,
   .meal-clock {
     grid-template-columns: 1fr;
   }
