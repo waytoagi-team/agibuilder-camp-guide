@@ -29,6 +29,115 @@
     return Promise.resolve();
   }
 
+  const accessNames = [
+    "郝凯源",
+    "陈创平",
+    "王心怡",
+    "马立德",
+    "倪豪",
+    "陈柏宇",
+    "张天远",
+    "董志伟",
+    "谷晓涓",
+    "叶子野",
+    "张龑",
+    "柯晔坤",
+    "洪莎俐",
+    "罗燕",
+    "陈思伟",
+    "李经纬",
+    "张天琦",
+    "joanna liu",
+    "樊舒扬",
+    "王泽",
+    "李样兵",
+    "刘朝",
+    "刘雨",
+    "吴衍晴",
+    "王健乐",
+    "王俊凯",
+    "李利伟",
+    "王莹",
+    "于昊任",
+    "聂勇刚",
+    "邱源顺",
+    "王维真",
+    "何凡",
+    "闫硕",
+    "高嘉丰",
+    "郑百川",
+    "沈煜洁",
+    "屈江峰",
+    "张雨霏",
+    "陈瀚翔",
+    "郑忠炜",
+    "陈泉",
+    "陈越",
+    "高雁",
+    "王贝",
+    "熊腾焱"
+  ];
+  const accessStorageKey = "agibuilder-house-access-name";
+  const normalizeName = (value) => value.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
+  const nameKeys = (value) => {
+    const normalized = normalizeName(value);
+    return [normalized, normalized.replace(/\s+/g, "")];
+  };
+  const authorizedNameKeys = new Set(accessNames.flatMap(nameKeys));
+  const isAuthorizedName = (value) => nameKeys(value).some((key) => authorizedNameKeys.has(key));
+
+  const accessGate = document.querySelector("[data-access-gate]");
+  const accessForm = document.querySelector("[data-access-form]");
+  const accessInput = document.querySelector("[data-access-name]");
+  const accessError = document.querySelector("[data-access-error]");
+
+  function grantAccess(name, showMessage) {
+    document.documentElement.classList.add("access-granted");
+    if (accessGate) accessGate.hidden = true;
+    if (name) {
+      try {
+        window.localStorage.setItem(accessStorageKey, normalizeName(name));
+      } catch (error) {
+        // Local storage can be unavailable in private browsing.
+      }
+    }
+    if (showMessage) showToast("已进入指南");
+  }
+
+  function lockAccess() {
+    document.documentElement.classList.remove("access-granted");
+    if (accessGate) accessGate.hidden = false;
+    window.setTimeout(() => accessInput && accessInput.focus(), 0);
+  }
+
+  if (accessForm && accessInput) {
+    let storedName = "";
+    try {
+      storedName = window.localStorage.getItem(accessStorageKey) || "";
+    } catch (error) {
+      storedName = "";
+    }
+
+    if (storedName && isAuthorizedName(storedName)) {
+      grantAccess(storedName, false);
+    } else {
+      lockAccess();
+    }
+
+    accessForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = accessInput.value;
+      if (isAuthorizedName(name)) {
+        if (accessError) accessError.textContent = "";
+        grantAccess(name, true);
+        return;
+      }
+
+      if (accessError) accessError.textContent = "未找到这个名字，请检查姓名是否完整。";
+      accessInput.select();
+    });
+  }
+
   document.querySelectorAll("[data-copy]").forEach((button) => {
     button.addEventListener("click", () => {
       copyText(button.dataset.copy)

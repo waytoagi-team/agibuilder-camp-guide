@@ -17,6 +17,17 @@
     <meta name="twitter:image" content="https://waytoagi-team.github.io/agibuilder-house-guide/assets/checkin-hall.jpg">
     <link rel="icon" href="./assets/agibuilder-logo.png" type="image/png">
     <link rel="canonical" href="https://waytoagi-team.github.io/agibuilder-house-guide/">
+    <script>
+      (function () {
+        try {
+          if (window.localStorage.getItem("agibuilder-house-access-name")) {
+            document.documentElement.classList.add("access-granted");
+          }
+        } catch (error) {
+          document.documentElement.classList.remove("access-granted");
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="./styles.css">
     <script type="application/ld+json">
       {
@@ -40,6 +51,23 @@
     </script>
   </head>
   <body>
+    <div class="access-gate" data-access-gate role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+      <div class="access-card">
+        <img class="access-logo" src="./assets/agibuilder-logo.png" alt="AGI Builder">
+        <p class="eyebrow">AGIBuilder House</p>
+        <h2 id="accessTitle">请输入入营姓名</h2>
+        <p class="access-copy">输入名单中的任意一个姓名即可进入。通过后，这台设备会记住你的访问状态。</p>
+        <form class="access-form" data-access-form>
+          <label class="access-field">
+            <span>姓名</span>
+            <input type="text" data-access-name autocomplete="name" placeholder="例如：董志伟">
+          </label>
+          <button type="submit">进入指南</button>
+          <p class="access-error" data-access-error aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
     <header class="site-header">
       <a class="brand" href="#top" aria-label="AGIBuilder House 入营指南">
         <img class="brand-logo" src="./assets/agibuilder-logo.png" alt="AGI Builder">
