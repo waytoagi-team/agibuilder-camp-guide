@@ -20,7 +20,7 @@
     <script>
       (function () {
         try {
-          if (window.localStorage.getItem("agibuilder-house-access-name")) {
+          if (window.localStorage.getItem("agibuilder-house-access-ok") === "1") {
             document.documentElement.classList.add("access-granted");
           }
         } catch (error) {
@@ -60,7 +60,7 @@
         <form class="access-form" data-access-form>
           <label class="access-field">
             <span>姓名</span>
-            <input type="text" data-access-name autocomplete="name" placeholder="例如：董志伟">
+            <input type="text" data-access-name autocomplete="name" placeholder="请输入你的姓名">
           </label>
           <button type="submit">进入指南</button>
           <p class="access-error" data-access-error aria-live="polite"></p>
